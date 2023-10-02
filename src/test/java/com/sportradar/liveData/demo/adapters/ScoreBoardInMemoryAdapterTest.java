@@ -69,4 +69,29 @@ public class ScoreBoardInMemoryAdapterTest {
         // Assert
         Assertions.assertEquals("Provide a valid home and away team", exception.getMessage());
     }
+
+    @Test
+    void finishGameShouldRemoveMatch() {
+        // Arrange
+        ScoreBoardInMemoryAdapter adapter = new ScoreBoardInMemoryAdapter();
+        Match match = adapter.startGame(new Team(), new Team());
+        int matchesCount = adapter.getMatches().size();
+        // Act
+        boolean success = adapter.finishGame(match.getId());
+        // Arrange
+        Assertions.assertTrue(success);
+        Assertions.assertEquals(matchesCount - 1, adapter.getMatches().size());
+    }
+
+    @Test
+    void finishGameShouldNotRemoveMatchWhenIdNotFound() {
+        ScoreBoardInMemoryAdapter adapter = new ScoreBoardInMemoryAdapter();
+        Match match = adapter.startGame(new Team(), new Team());
+        int matchesCount = adapter.getMatches().size();
+        // Act
+        boolean success = adapter.finishGame(10);
+        // Arrange
+        Assertions.assertFalse(success);
+        Assertions.assertEquals(matchesCount, adapter.getMatches().size());
+    }
 }
