@@ -1,5 +1,6 @@
 package com.sportradar.liveData.demo.adapters;
 
+import com.sportradar.liveData.demo.helpers.TotalScoreComparator;
 import com.sportradar.liveData.demo.model.IScoreBoardRepository;
 import com.sportradar.liveData.demo.model.Match;
 import com.sportradar.liveData.demo.model.Team;
@@ -32,6 +33,26 @@ public class ScoreBoardInMemoryAdapter implements IScoreBoardRepository {
         int matchesCount = matches.size();
         matches = matches.stream().filter(match -> match.getId() != id).toList();
         return (matchesCount - 1) == matches.size();
+    }
+
+    @Override
+    public Match updateScore(int matchId, int homeScore, int awayScore) {
+        return matches.stream()
+                .filter(match -> match.getId() == matchId)
+                .map(match -> {
+                    match.setHomeScore(homeScore);
+                    match.setAwayScore(awayScore);
+                    return match;
+                })
+                .findAny().orElse(null);
+    }
+
+    @Override
+    public List<Match> getMatchesSortByTotalScore() {
+        return matches
+                .stream()
+                .sorted(new TotalScoreComparator())
+                .toList();
     }
 
     private boolean isStartGameParametersValid(Team homeTeam, Team awayTeam) {

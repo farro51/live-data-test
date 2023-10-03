@@ -8,3 +8,7 @@ Simple Spring boot project created with Spring initializer, I have used:
 - Junit 5
 
 I tried to simulate a clean architecture using packages.
+
+With the class ScoreBoardUseCase I replicate the example using all operations required 
+
+The ScoreBoardUseCaseTest is only used to run the example
